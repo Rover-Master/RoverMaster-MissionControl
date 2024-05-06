@@ -1,0 +1,23 @@
+/* ---------------------------------------------------------
+ * Copyright (c) 2024 Yuxuan Zhang, robotics@z-yx.cc
+ * This source code is licensed under the MIT license.
+ * You may find the full license in project root directory.
+ * ------------------------------------------------------ */
+
+* {
+  user-select: none;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: normal;
+
+  color-scheme: dark;
+  color: white;
+  background-color: #1A1A1A;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
