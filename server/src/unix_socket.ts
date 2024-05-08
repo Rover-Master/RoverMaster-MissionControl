@@ -19,31 +19,59 @@ function ensure_removed(path: string) {
 }
 
 export default function createUnixSocketServer(
-  path = "/tmp/ros-web-agent.sock"
+  path = "/tmp/ros-web-agent.sock",
 ) {
   ensure_removed(path);
+  const sockets = new Set<net.Socket>();
   // Create UNIX socket server
   const server = net.createServer((socket) => {
-    const { remoteAddress } = socket;
+    const { remoteAddress = "<unix socket>" } = socket;
+
+    // Register socket
     console.log("[INFO]", `ROS agent ${remoteAddress} connected`);
-    // Attach event listener for incoming data and close event
+    sockets.add(socket);
+
+    // Attach error handler
+    socket.on("error", (e) => {
+      console.error("[ERROR]", remoteAddress, e.message);
+      try {
+        socket.destroy();
+      } catch (e) {}
+    });
+
+    // Attach incoming data handler
     socket.on("data", (data) => {
       hub.dispatchEvent(new CustomEvent("robot->client", { detail: data }));
     });
-    // Attach event listener for inbound data
-    const listener = (event: Event) => {
-      const data = (event as RosMessage).detail;
-      socket.write(data, (e) => {
-        console.error("[ERROR]", e, "to", remoteAddress);
-        socket.destroy();
-      });
-    };
-    hub.addEventListener("client->robot", listener);
-    // Attach event listener for close event, detach event listener
+
+    // Remove hub event listener upon socket close
     socket.on("close", () => {
-      hub.removeEventListener("client->robot", listener);
       console.log("[INFO]", `ROS agent ${remoteAddress} disconnected`);
+      sockets.delete(socket);
     });
+  });
+
+  // Listen for outbound message
+  hub.addEventListener("client->robot", (event) => {
+    const data = (event as RosMessage).detail;
+    for (const socket of sockets) {
+      socket.write(data, (e) => {
+        if (e instanceof Error) {
+          console.error("[ERROR]", "when sending data to ROS agent:", e);
+          try {
+            socket.destroy();
+          } catch (e) {}
+        }
+      });
+    }
+  });
+
+  // Add listener for server termination
+  hub.addEventListener("shutdown", () => {
+    for (const socket of sockets) {
+      socket.destroy();
+    }
+    server.close();
   });
 
   // Start listening on UNIX socket
@@ -55,6 +83,4 @@ export default function createUnixSocketServer(
   server.on("close", () => {
     ensure_removed(path);
   });
-
-  return server;
 }

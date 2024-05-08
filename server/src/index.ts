@@ -4,17 +4,20 @@
  * You may find the full license in project root directory.
  * ------------------------------------------------------ */
 
-import createUnixSocketServer from "./unix_socket.js";
-import createHttpWebServer from "./web_server.js";
+import hub from "./event";
+import createUnixSocketServer from "./unix_socket";
+import createHttpWebServer from "./web_server";
 
-const unix_server = createUnixSocketServer();
-const http_server = createHttpWebServer();
+// Create servers
+createUnixSocketServer();
+createHttpWebServer();
 
 // Close server on SIGINT
 process.on("SIGINT", () => {
   console.log("[INFO]", "Received SIGINT, closing servers...");
-  unix_server.close();
-  http_server.close();
+  hub.dispatchEvent(new Event("shutdown"));
   // Reset signal handler
   process.removeAllListeners("SIGINT");
+  // Exit after 1 second
+  setTimeout(() => process.exit(0), 2000).unref();
 });
