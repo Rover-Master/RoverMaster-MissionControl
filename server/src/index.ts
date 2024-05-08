@@ -15,4 +15,6 @@ process.on("SIGINT", () => {
   console.log("[INFO]", "Received SIGINT, closing servers...");
   unix_server.close();
   http_server.close();
+  // Reset signal handler
+  process.removeAllListeners("SIGINT");
 });
