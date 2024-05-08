@@ -1,0 +1,9 @@
+.github
+.vscode
+
+src
+server
+tests
+dist/*.map
+
+README.md

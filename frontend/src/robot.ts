@@ -8,7 +8,6 @@
 
 import { ref } from "vue";
 import { topicToRobotSatates } from "./mappings";
-export const connected = ref(false);
 
 export class Vector3D {
   x: number = 0;
@@ -52,9 +51,9 @@ function init_state() {
 }
 
 class Robot extends EventTarget {
-  #state = ref<RobotState>(init_state()) as any as RobotState;
+  #state = ref<RobotState>(init_state());
   get state() {
-    return this.#state;
+    return this.#state.value;
   }
 
   constructor(create_ws: () => WebSocket) {
@@ -76,7 +75,7 @@ class Robot extends EventTarget {
       }
       const [topic, data] = [line.slice(0, i), JSON.parse(line.slice(i + 1))];
       if (topic in topicToRobotSatates) {
-        topicToRobotSatates[topic](data, this.#state);
+        topicToRobotSatates[topic](data, this.state);
       } else {
         console.warn("Received unknown topic from robot server:", topic, data);
       }
@@ -89,19 +88,19 @@ class Robot extends EventTarget {
     const ws = (this.#ws = create_ws());
     ws.addEventListener("open", () => {
       console.log("Connected to robot server");
-      this.#state.connected = true;
+      this.state.connected = true;
       this.#retry_count = 0;
     });
     ws.addEventListener("close", () => {
       this.#ws = null;
-      this.#state.connected = false;
+      this.state.connected = false;
       // Retry connection after a timeout
       const timeout = Math.min(1000 * 2 ** this.#retry_count, 64_000);
       this.#retry_count++;
       // Report scheduled retry attempt
       console.warn(
         "Disconnected from robot server,",
-        `reconnecting in ${timeout / 1000}s...`
+        `reconnecting in ${timeout / 1000}s...`,
       );
       setTimeout(() => this.#configure(create_ws), timeout);
     });
@@ -113,7 +112,7 @@ class Robot extends EventTarget {
     const out_buf = data
       .map((d) => (typeof d === "string" ? d : JSON.stringify(d)))
       .join("");
-    if (this.#state.connected && this.#ws) {
+    if (this.state.connected && this.#ws) {
       this.#ws.send(out_buf);
     } else {
       console.warn("Robot server is not connected, message dropped:", out_buf);

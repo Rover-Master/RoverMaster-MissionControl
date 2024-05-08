@@ -7,24 +7,21 @@ TODO: Add description for this file
 ------------------------------------------------------->
 
 <script setup lang="ts">
-import Gamepad from './Gamepad.vue'
-import robot from './robot.ts'
+import Gamepad from "./Gamepad.vue";
+import robot from "./robot.ts";
 </script>
 
 <template>
   <div class="col-layout grid-view">
     <div id="header">
-      <div><span class="logo">RoverMaster</span>
-        &nbsp;
-        Mission
-        Control</div>
-      <div style="flex-grow: 1;"><!-- SPACER --></div>
-      <div class="badge" :class="[robot.state.connected ? 'green' : 'red']">{{
-        robot.state.connected ? "CONNECTED" : "DISCONNECTED"
-      }}</div>
+      <div><span class="logo">RoverMaster</span> &nbsp; Mission Control</div>
+      <div style="flex-grow: 1"><!-- SPACER --></div>
+      <div class="badge" :class="[robot.state.connected ? 'green' : 'red']">
+        {{ robot.state.connected ? "CONNECTED" : "DISCONNECTED" }}
+      </div>
       <div class="badge">DISARMED</div>
     </div>
-    <div class="row-layout grid-view" style="height: 50%;">
+    <div class="row-layout grid-view" style="height: 50%">
       <div style="width: 50%">
         <h1 style="color: gray">A</h1>
       </div>
@@ -32,7 +29,7 @@ import robot from './robot.ts'
         <h1 style="color: gray">B</h1>
       </div>
     </div>
-    <div class="row-layout grid-view" style="height: 50%;">
+    <div class="row-layout grid-view" style="height: 50%">
       <Gamepad />
       <div style="width: 50%">
         <h1 style="color: gray">D</h1>
@@ -63,7 +60,7 @@ import robot from './robot.ts'
   min-height: 3.6rem;
   flex-grow: 0;
   background-color: #012;
-  color: #CCC;
+  color: #ccc;
   font-size: 1.5em;
   justify-content: flex-start;
   padding: 0 1em;
@@ -72,7 +69,11 @@ import robot from './robot.ts'
 
   .logo {
     font-style: italic;
-    background: -webkit-linear-gradient(45deg, hsl(220, 100%, 60%), hsl(120, 100%, 80%));
+    background: -webkit-linear-gradient(
+      45deg,
+      hsl(220, 100%, 60%),
+      hsl(120, 100%, 80%)
+    );
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
@@ -82,7 +83,7 @@ import robot from './robot.ts'
     font-weight: bolder;
     padding: 0.3em 0.6em;
     border-radius: 0.5em;
-    color: #FFF;
+    color: #fff;
     background-color: #444;
     margin-left: 1em;
 
@@ -100,12 +101,12 @@ import robot from './robot.ts'
   }
 }
 
-.grid-view>div {
+.grid-view > div {
   border: 1px solid #333;
 }
 
-.col-layout>div,
-.row-layout>div {
+.col-layout > div,
+.row-layout > div {
   margin: -1px;
   min-width: 10vw;
   min-height: 10vh;
@@ -126,7 +127,7 @@ import robot from './robot.ts'
   flex-direction: column;
   height: 100%;
 
-  &>* {
+  & > * {
     width: 100%;
   }
 }
@@ -135,8 +136,9 @@ import robot from './robot.ts'
   flex-direction: row;
   width: 100%;
 
-  &>* {
+  & > * {
     height: 100%;
   }
 }
-</style>./Gamepad.vue/index.ts
+</style>
+./Gamepad.vue/index.ts

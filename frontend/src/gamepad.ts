@@ -63,7 +63,7 @@ window.addEventListener("gamepadconnected", (e) => {
     e.gamepad.buttons.length,
     `buttons, `,
     e.gamepad.axes.length,
-    `axes).`
+    `axes).`,
   );
   gamepad.value = e.gamepad;
 });
@@ -71,7 +71,7 @@ window.addEventListener("gamepaddisconnected", (e) => {
   console.log(
     "Gamepad disconnected from index %d: %s",
     e.gamepad.index,
-    e.gamepad.id
+    e.gamepad.id,
   );
   if (gamepad.value?.index === e.gamepad.index) gamepad.value = null;
 });
@@ -83,8 +83,8 @@ setInterval(() => {
     lStick.value,
     rStick.value,
     buttons.value,
-    gamepad.value
+    gamepad.value,
   )) {
-    robot.send(`${topic}\t${JSON.stringify(data)}\n`);
+    robot.send(`${topic} ${JSON.stringify(data)}\n`);
   }
 }, 1000 / 30);

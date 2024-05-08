@@ -5,7 +5,3 @@ You may find the full license in project root directory.
 --------------------------------------------------------
 TODO: Add description for this file
 ------------------------------------------------------->
-
-<script setup lang="ts">
-
-</script>

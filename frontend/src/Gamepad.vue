@@ -7,24 +7,45 @@ TODO: Add description for this file
 ------------------------------------------------------->
 
 <script setup lang="ts">
-import { gamepad, lStick, rStick, buttons } from './gamepad.ts'
-import ControllerStick from './Instruments/ControllerStick.vue'
-import ControllerButton from './Instruments/ControllerButton.vue';
+import { gamepad, lStick, rStick, buttons } from "./gamepad.ts";
+import ControllerStick from "./Instruments/ControllerStick.vue";
+import ControllerButton from "./Instruments/ControllerButton.vue";
 </script>
 
 <template>
-  <div class="controller-view" style="width: 32rem; flex-grow: 0;">
+  <div class="controller-view" style="width: 32rem; flex-grow: 0">
     <template v-if="gamepad">
       <div>
         <h1>{{ gamepad.id }}</h1>
       </div>
-      <div class="row-layout" style="justify-content: space-evenly;">
-        <ControllerStick style="max-width: 8rem;" :x="lStick.x" :y="lStick.y" text="L" />
-        <ControllerStick style="max-width: 8rem;" :x="rStick.x" :y="rStick.y" text="R" />
+      <div class="row-layout" style="justify-content: space-evenly">
+        <ControllerStick
+          style="max-width: 8rem"
+          :x="lStick.x"
+          :y="lStick.y"
+          text="L"
+        />
+        <ControllerStick
+          style="max-width: 8rem"
+          :x="rStick.x"
+          :y="rStick.y"
+          text="R"
+        />
       </div>
-      <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;">
-        <template v-for="v, i in buttons" :key="i">
-          <ControllerButton style="width: 2rem; margin: 0.4em;" :v="v" :text="i.toString().padStart(2, '0')" />
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+        "
+      >
+        <template v-for="(v, i) in buttons" :key="i">
+          <ControllerButton
+            style="width: 2rem; margin: 0.4em"
+            :v="v"
+            :text="i.toString().padStart(2, '0')"
+          />
         </template>
       </div>
     </template>
@@ -42,7 +63,7 @@ div.controller-view {
   flex-direction: column;
   justify-content: flex-start;
 
-  &>* {
+  & > * {
     width: 100%;
     margin: 0 0 2rem 0;
   }
@@ -62,4 +83,5 @@ div.controller-view {
     color: #555;
   }
 }
-</style>./gamepad.ts
+</style>
+./gamepad.ts

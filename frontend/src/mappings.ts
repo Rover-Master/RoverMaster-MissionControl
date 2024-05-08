@@ -16,14 +16,14 @@ export function gamepadToRobotTopic(
   lStick: Stick,
   rStick: Stick,
   buttons: number[],
-  _: Gamepad // reserved for checking gamepad type
+  _: Gamepad, // reserved for checking gamepad type
 ): [string, any][] {
   const topics: [string, any][] = [],
     turn_left = buttons[6] ?? 0,
     turn_right = buttons[7] ?? 0;
   // Base velocity
   topics.push([
-    "/robot/base/velocity/set",
+    "vel/set",
     new Twist({
       linear: new Vector3D({
         x: -lStick.y,
@@ -36,7 +36,7 @@ export function gamepadToRobotTopic(
   ]);
   // Platform attitude
   topics.push([
-    "/robot/platform/attitude/set",
+    "platform/pos/set",
     new Twist({
       angular: new Vector3D({
         y: 90 * rStick.y,
@@ -50,7 +50,9 @@ export function gamepadToRobotTopic(
 type RobotStateUpdater = (data: any, state: RobotState) => void;
 
 export const topicToRobotSatates: Record<string, RobotStateUpdater> = {
-  ["/web_server/acc"](data, state) {},
-  ["/web_server/att"](data, state) {},
-  ["/web_server/info"](data, state) {},
+  ["vel/get"](data, state) {},
+  ["platform/pos/get"](data, state) {},
+  ["imu/acc"](data, state) {},
+  ["imu/att"](data, state) {},
+  ["info"](data, state) {},
 };
