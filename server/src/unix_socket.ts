@@ -18,9 +18,7 @@ function ensure_removed(path: string) {
   }
 }
 
-export default function createUnixSocketServer(
-  path = "/tmp/ros-web-agent.sock",
-) {
+export default function createUnixSocketServer(path = "/tmp/ros-agent.sock") {
   ensure_removed(path);
   const sockets = new Set<net.Socket>();
   // Create UNIX socket server

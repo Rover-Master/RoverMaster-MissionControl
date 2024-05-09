@@ -1,9 +1,8 @@
 .github
 .vscode
+node_modules
 
-src
+frontend
 server
-tests
-dist/*.map
 
 README.md
