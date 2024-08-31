@@ -52,7 +52,20 @@ type RobotStateUpdater = (data: any, state: RobotState) => void;
 export const topicToRobotSatates: Record<string, RobotStateUpdater> = {
   ["vel/get"](data, state) {},
   ["platform/pos/get"](data, state) {},
-  ["imu/acc"](data, state) {},
-  ["imu/att"](data, state) {},
+  ["imu/acc"](data, state) {
+    const { linear, angular } = data;
+    for (const k in linear) {
+      linear[k] *= 9.8 * 2040;
+    }
+    Object.assign(state.accel.linear, linear);
+    Object.assign(state.accel.angular, angular);
+  },
+  ["imu/att"](data, state) {
+    const { angular } = data;
+    angular.x *= 90 / 1000;
+    angular.y *= 90 / 1000;
+    console.log("attitude", angular);
+    Object.assign(state.attitude.angular, angular);
+  },
   ["info"](data, state) {},
 };

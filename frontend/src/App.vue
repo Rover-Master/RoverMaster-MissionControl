@@ -7,8 +7,10 @@ TODO: Add description for this file
 ------------------------------------------------------->
 
 <script setup lang="ts">
-import Gamepad from "./Gamepad.vue";
 import robot from "./robot.ts";
+import Gamepad from "./Gamepad.vue";
+import AttitudeInstrument from "./Instruments/Attitude.vue";
+import HeadingInstrument from "./Instruments/Heading.vue";
 </script>
 
 <template>
@@ -22,12 +24,8 @@ import robot from "./robot.ts";
       <div class="badge">DISARMED</div>
     </div>
     <div class="row-layout grid-view" style="height: 50%">
-      <div style="width: 50%">
-        <h1 style="color: gray">A</h1>
-      </div>
-      <div style="width: 50%">
-        <h1 style="color: gray">B</h1>
-      </div>
+      <AttitudeInstrument />
+      <HeadingInstrument />
     </div>
     <div class="row-layout grid-view" style="height: 50%">
       <Gamepad />

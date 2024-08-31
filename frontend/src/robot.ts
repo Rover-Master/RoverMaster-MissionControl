@@ -61,26 +61,31 @@ class Robot extends EventTarget {
     this.#configure(create_ws);
   }
 
-  #line_buffer = "";
-  handle_message(data: string) {
-    this.#line_buffer += data;
-    const lines = this.#line_buffer.split("\n");
-    while (lines.length > 1) {
-      const line = lines.shift()?.trim();
-      if (!line) continue;
-      const i = this.#line_buffer.indexOf("\n");
-      if (i < 0) {
-        console.warn("Invalid line from robot server:", line);
-        continue;
-      }
-      const [topic, data] = [line.slice(0, i), JSON.parse(line.slice(i + 1))];
+  handle_message(message: string) {
+    const line = message?.trim();
+    if (!line) return;
+    const i = line.indexOf(" ");
+    if (i < 0) {
+      console.warn("Received malformed message from robot server:", line);
+      return;
+    }
+    try {
+      const [topic, data] = [
+        line.slice(0, i).trim(),
+        JSON.parse(line.slice(i + 1)),
+      ];
       if (topic in topicToRobotSatates) {
-        topicToRobotSatates[topic](data, this.state);
+        try {
+          topicToRobotSatates[topic](data, this.state);
+        } catch (e) {
+          console.error(e);
+        }
       } else {
         console.warn("Received unknown topic from robot server:", topic, data);
       }
+    } catch (e) {
+      console.warn("while handling", message, "got error", e);
     }
-    this.#line_buffer = lines.join("\n");
   }
 
   #retry_count = 0;
@@ -125,6 +130,6 @@ const wsProtocol = isSecure ? "wss" : "ws";
 // Try to connect to websocket server
 // Export robot instance
 const robot = new Robot(
-  () => new WebSocket(`${wsProtocol}://${window.location.host}/`)
+  () => new WebSocket(`${wsProtocol}://${window.location.host}/`),
 );
 export default robot;
