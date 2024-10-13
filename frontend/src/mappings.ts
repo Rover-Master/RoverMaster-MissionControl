@@ -34,16 +34,6 @@ export function gamepadToRobotTopic(
       }),
     }),
   ]);
-  // Platform attitude
-  topics.push([
-    "platform/pos/set",
-    new Twist({
-      angular: new Vector3D({
-        y: 90 * rStick.y,
-        z: -180 * rStick.x,
-      }),
-    }),
-  ]);
   return topics;
 }
 
@@ -61,6 +51,14 @@ export const topicToRobotSatates: Record<string, RobotStateUpdater> = {
     Object.assign(state.accel.angular, angular);
   },
   ["imu/att"](data, state) {
+    const { angular } = data;
+    angular.x *= 90 / 1000;
+    angular.y *= 90 / 1000;
+    console.log("attitude", angular);
+    Object.assign(state.attitude.angular, angular);
+  },
+  ["imu"](data, state) {
+    return console.log("imu", data);
     const { angular } = data;
     angular.x *= 90 / 1000;
     angular.y *= 90 / 1000;
