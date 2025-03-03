@@ -15,7 +15,7 @@
     "server:build:check": "tsc -p ./server/tsconfig.json --noEmit",
     "server:build:rollup": "rollup --config server/rollup.config.ts --configPlugin esbuild",
     "build": "run-s build:dir server:build frontend:build",
-    "serve": "run-s server:build:rollup; node dist/server.js"
+    "serve": "run-s frontend:build:rollup server:build:rollup; node dist/server.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
