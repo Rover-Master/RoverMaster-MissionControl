@@ -28,16 +28,16 @@ const get_mask = (a: number, r: number, x: number = 0, y: number = 0) =>
 
 <template>
   <svg
-    class="attidude-panel"
+    class="attitude-panel"
     viewBox="-60 -60 120 130"
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
-      <clipPath id="attidude-panel-mask">
+      <clipPath id="attitude-panel-mask">
         <path :d="get_mask(50, 20)" />
       </clipPath>
     </defs>
-    <g class="panel" clip-path="url(#attidude-panel-mask)">
+    <g class="panel" clip-path="url(#attitude-panel-mask)">
       <!-- Pitch Indicator -->
       <g class="pitch-indicator">
         <g
@@ -99,7 +99,7 @@ const get_mask = (a: number, r: number, x: number = 0, y: number = 0) =>
 </template>
 
 <style scoped lang="scss">
-svg.attidude-panel {
+svg.attitude-panel {
   margin: 0.5em;
 
   .pitch-indicator {
